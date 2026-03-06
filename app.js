@@ -34,11 +34,26 @@ for (var c = 0; c < brickColumnCount; c++) {
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
+document.addEventListener("touchstart", touchHandler, {passive: false});
+document.addEventListener("touchmove", touchHandler, {passive: false});
 
 function mouseMoveHandler(e) {
-    var relativeX = e.clientX - canvas.offsetLeft;
+    var rect = canvas.getBoundingClientRect();
+    var scaleX = canvas.width / rect.width;
+    var relativeX = (e.clientX - rect.left) * scaleX;
     if (relativeX > 0 && relativeX < canvas.width) {
         paddleX = relativeX - paddleWidth / 2;
+    }
+}
+
+function touchHandler(e) {
+    if (e.touches && e.touches.length > 0) {
+        var rect = canvas.getBoundingClientRect();
+        var scaleX = canvas.width / rect.width;
+        var relativeX = (e.touches[0].clientX - rect.left) * scaleX;
+        if (relativeX > 0 && relativeX < canvas.width) {
+            paddleX = relativeX - paddleWidth / 2;
+        }
     }
 }
 
